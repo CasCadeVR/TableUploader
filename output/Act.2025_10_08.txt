@@ -1,0 +1,5 @@
+actNumber  actWorks          customer  date        executor  id                                    
+===================================================================================================
+2          List<actWorks>:2  customer  2025-09-21  executor  8d82dec6-e684-43df-ad90-71323b73e533  
+s1tring    List<actWorks>:0  customer  2025-09-05  executor  36d68b9d-2d92-4bbc-9696-0844d702fc25  
+1          List<actWorks>:1  customer  2025-09-01  executor  3c1fc641-f11f-4092-8aa7-fa1630ed165d  
