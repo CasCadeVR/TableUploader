@@ -6,5 +6,5 @@ from typing import Any
 
 class ApiClientInterface(ABC):
     @abstractmethod
-    def fetch_data(self, url: str) -> Dict[str, Any]:
+    async def fetch_data(self, url: str) -> Dict[str, Any]:
         pass

@@ -4,8 +4,6 @@ from typing import List
 
 from contracts import DataProcessorInterface
 
-from logger_config import setup_logger
-
 def process_value(value: Any, column_name: str = "") -> str:
     """Обработать значение"""
     if value is None:
@@ -23,36 +21,33 @@ def process_value(value: Any, column_name: str = "") -> str:
         return str(value)
 
 class DataProcessor(DataProcessorInterface):
-    def __init__(self):
+    def __init__(self, logger):
         """Инициализирует новый экземпляр"""
-        self.logger = setup_logger(__name__)
+        self.logger = logger
 
     def process(self, data) -> List[Dict[str, str]]:
         """Обработать данные из словаря"""
+        _possible_dict_outcomes = ('data', 'results')
+        
         if isinstance(data, list):
             return self._process_list(data)
         
         elif isinstance(data, dict):
-            if 'data' in data and isinstance(data['data'], list):
-                return self._process_list(data['data'])
-            
-            elif 'results' in data and isinstance(data['results'], list):
-                return self._process_list(data['results'])
-            
-            else:
-                return [data]
+            for key in _possible_dict_outcomes:
+                if key in data and isinstance(data[key], list):
+                    return self._process_list(data[key])
+                
+            return [data]
+        
         else:
-            self.logger.warning("Неподдерживаемый тип данных для обработки")
+            self.logger.warning("Unsupported data type for processing")
             return []
-
     def _process_list(self, data: List) -> List[Dict[str, str]]:
         processed = []
         
         for item in data:
             if isinstance(item, dict):
-                processed.append({
-                    k: process_value(v, k) for k, v in item.items()
-                })
+                processed.append({k: process_value(v, k) for k, v in item.items()})
                 
             else:
                 self.logger.warning(f"Найден элемент не типа словаря при его обраотке: {item}")

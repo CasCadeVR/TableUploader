@@ -16,7 +16,7 @@ from data_processor import process_value
 
 def extract_method_name(url: str) -> str:
     parsed = urlparse(url)
-    path_parts = [p for p in parsed.path.strip('/').split('/') if p]
+    path_parts = [part for part in parsed.path.strip('/').split('/') if part]
     
     for part in reversed(path_parts):
         if part and part[0].isalpha():
@@ -30,10 +30,10 @@ def extract_version(url: str) -> str:
 
 class FileExporter(FileExporterInterface):
     """Экспортер файлов"""
-    def __init__(self, output_dir: str = "."):
+    def __init__(self, logger, output_dir: str = "."):
         """Инициализирует новый экземпляр"""
         self.output_dir = output_dir
-        self.logger = setup_logger(__name__)
+        self.logger = logger
 
     def export(self, data: List[Dict], api_url: str) -> str:
         os.makedirs(self.output_dir, exist_ok=True)
