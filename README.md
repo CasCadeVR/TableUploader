@@ -15,3 +15,8 @@ pip install -r requirements.txt
 ```bash
 python main.py
 ```
+
+# или с параметром --url
+```bash
+python main.py --url https://jsonplaceholder.typicode.com/users
+``` 

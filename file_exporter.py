@@ -10,9 +10,9 @@ from typing import Dict
 
 from contracts import FileExporterInterface
 
-from logger_config import setup_logger
-
 from data_processor import process_value
+
+from logger_config import setup_logger
 
 def extract_method_name(url: str) -> str:
     parsed = urlparse(url)
@@ -24,16 +24,20 @@ def extract_method_name(url: str) -> str:
         
     return "api_data"
 
+
 def extract_version(url: str) -> str:
     match = re.search(r'/v(\d+)/', url)
     return f"v{match.group(1)}" if match else ""
 
+
 class FileExporter(FileExporterInterface):
     """Экспортер файлов"""
-    def __init__(self, logger, output_dir: str = "."):
+    
+    def __init__(self, output_dir: str = "."):
         """Инициализирует новый экземпляр"""
         self.output_dir = output_dir
-        self.logger = logger
+        self.logger = setup_logger(__name__)
+
 
     def export(self, data: List[Dict], api_url: str) -> str:
         os.makedirs(self.output_dir, exist_ok=True)
@@ -60,14 +64,12 @@ class FileExporter(FileExporterInterface):
         self.logger.info(f"Данные успешно экспортированы в {filepath}")
         return filepath
 
+
     def _write_result_table(self, data: List[Dict], file):
         if not data:
             return
 
-        headers = set()
-        for item in data:
-            headers.update(item.keys())
-        headers = sorted(headers)
+        headers = list(data[0].keys()) if data else []
 
         column_widths = {}
         for header in headers:

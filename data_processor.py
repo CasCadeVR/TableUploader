@@ -4,8 +4,11 @@ from typing import List
 
 from contracts import DataProcessorInterface
 
+from logger_config import setup_logger
+
 def process_value(value: Any, column_name: str = "") -> str:
     """Обработать значение"""
+    
     if value is None:
         return ""
     
@@ -20,10 +23,12 @@ def process_value(value: Any, column_name: str = "") -> str:
     else:
         return str(value)
 
+
 class DataProcessor(DataProcessorInterface):
-    def __init__(self, logger):
+    def __init__(self):
         """Инициализирует новый экземпляр"""
-        self.logger = logger
+        self.logger = setup_logger(__name__)
+
 
     def process(self, data) -> List[Dict[str, str]]:
         """Обработать данные из словаря"""
@@ -42,6 +47,8 @@ class DataProcessor(DataProcessorInterface):
         else:
             self.logger.warning("Unsupported data type for processing")
             return []
+        
+        
     def _process_list(self, data: List) -> List[Dict[str, str]]:
         processed = []
         

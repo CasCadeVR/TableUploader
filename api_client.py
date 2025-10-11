@@ -6,15 +6,17 @@ from typing import Any
 
 from contracts import ApiClientInterface
 
+from logger_config import setup_logger
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 class ApiClient(ApiClientInterface):
     """Клиент для получения данных из метода API"""
     
-    def __init__(self, logger, verify_ssl: bool = False):
+    def __init__(self, verify_ssl: bool = False):
         """Инициализирует новый экземпляр"""
         self.verify_ssl = verify_ssl
-        self.logger = logger
+        self.logger = setup_logger(__name__)
 
     async def fetch_data(self, url: str) -> Dict[str, Any]:
         """Получить данные по ссылке"""
