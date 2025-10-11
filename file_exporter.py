@@ -48,6 +48,7 @@ class FileExporter(FileExporterInterface):
             filename += f".{version}"
             
         filename += f".{current_date}.txt"
+        
         filepath = os.path.join(self.output_dir, filename)
 
         with open(filepath, 'w', encoding='utf-8') as file:
