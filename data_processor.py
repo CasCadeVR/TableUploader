@@ -45,7 +45,7 @@ class DataProcessor(DataProcessorInterface):
             return [data]
         
         else:
-            self.logger.warning("Unsupported data type for processing")
+            self.logger.warning("Неподдерживаемый тип данных для обработки")
             return []
         
         

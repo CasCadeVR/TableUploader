@@ -15,6 +15,8 @@ from data_processor import process_value
 from logger_config import setup_logger
 
 def extract_method_name(url: str) -> str:
+    """Изъять имя метода из ссылки"""
+    
     parsed = urlparse(url)
     path_parts = [part for part in parsed.path.strip('/').split('/') if part]
     
@@ -26,6 +28,8 @@ def extract_method_name(url: str) -> str:
 
 
 def extract_version(url: str) -> str:
+    """Изъять версию из ссылки"""
+    
     match = re.search(r'/v(\d+)/', url)
     return f"v{match.group(1)}" if match else ""
 
@@ -76,12 +80,19 @@ class FileExporter(FileExporterInterface):
             width = max(len(header), max(len(str(item.get(header, ""))) for item in data))
             column_widths[header] = width + 2
 
-        header_row =  "|" + "".join(header.ljust(column_widths[header]) + "|" for header in headers)
-        separator = "|" + "".join("=" * column_widths[header] + "|" for header in headers)
+        header_row =  "|" + ""\
+            .join(header.ljust(column_widths[header]) + "|" for header in headers)
+            
+        separator = "|" + ""\
+            .join("=" * column_widths[header] + "|" for header in headers)
 
         file.write(header_row + "\n")
         file.write(separator + "\n")
 
         for item in data:
-            row = "|" + "".join(process_value(item.get(header, ""), header).ljust(column_widths[header])+ "|" for header in headers)
+            row = "|" + ""\
+                .join(process_value(item.get(header, ""), header)\
+                .ljust(column_widths[header])+ "|" for header in headers)\
+                .replace("\n", "\\n")
+                
             file.write(row + "\n")
